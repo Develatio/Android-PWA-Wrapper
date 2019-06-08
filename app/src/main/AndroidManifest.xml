@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.develatio.androidpwawrapper">
+    <!-- Necessary permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+    <!-- Add support for Chromebooks -->
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupOnly="true"
+        android:resizeableActivity="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:fullBackupContent="@xml/backup_descriptor"
+        tools:targetApi="n"
+        android:icon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_round">
+        <activity android:name="com.develatio.androidpwawrapper.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme.Launch">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="develat.io"
+                    android:pathPrefix="/"
+                    android:scheme="http" />
+                <data
+                    android:host="www.develat.io"
+                    android:pathPrefix="/"
+                    android:scheme="http" />
+                <data
+                    android:host="develat.io"
+                    android:pathPrefix="/"
+                    android:scheme="https" />
+                <data
+                    android:host="www.develat.io"
+                    android:pathPrefix="/"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+        <!--Support super wide screens-->
+        <meta-data android:name="android.max_aspect" android:value="2.1" />
+    </application>
+</manifest>
