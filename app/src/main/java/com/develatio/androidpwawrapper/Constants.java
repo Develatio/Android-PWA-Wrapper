@@ -5,8 +5,8 @@ public class Constants {
     // Root page
     public static final String WEBAPP_URL = "https://develat.io";
     public static final String WEBAPP_HOST = "develat.io"; // used for checking Intent-URLs
-    public static final String APP_VERSION = "AndroidApp/0.0.1";
-	
+    public static final String APP_VERSION = "AndroidApp/" + BuildConfig.VERSION_NAME;
+
 	// Constants
     // window transition duration in ms
     public static final int SLIDE_EFFECT = 2200;

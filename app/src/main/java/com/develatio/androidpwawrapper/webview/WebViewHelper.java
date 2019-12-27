@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,12 +17,14 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.develatio.androidpwawrapper.Constants;
 import com.develatio.androidpwawrapper.R;
@@ -33,6 +36,10 @@ public class WebViewHelper {
     private final UIManager uiManager;
     private final WebView webView;
     private final WebSettings webSettings;
+
+    public ValueCallback<Uri[]> mFilePathCallback;
+    public ValueCallback<Uri> mUploadMessage;
+    public int FILECHOOSER_RESULTCODE = 1;
 
     public WebViewHelper(Activity activity, UIManager uiManager) {
         this.activity = activity;
@@ -85,6 +92,10 @@ public class WebViewHelper {
         // must be set for our js-popup-blocker:
         webSettings.setSupportMultipleWindows(true);
 
+        // File access
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAllowContentAccess(true);
+
         // PWA settings
         webSettings.setDomStorageEnabled(true);
         webSettings.setAppCachePath(activity.getApplicationContext().getCacheDir().getAbsolutePath());
@@ -115,6 +126,36 @@ public class WebViewHelper {
 
         // enable HTML5-support
         webView.setWebChromeClient(new WebChromeClient() {
+            //For Android 4.1 only
+            protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+                mUploadMessage = uploadMsg;
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                activity.startActivityForResult(Intent.createChooser(intent, "File Browser"), FILECHOOSER_RESULTCODE);
+            }
+
+            // For Lollipop 5.0+ Devices
+            public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+                if (mFilePathCallback != null) {
+                    mFilePathCallback.onReceiveValue(null);
+                    mFilePathCallback = null;
+                }
+
+                mFilePathCallback = filePathCallback;
+
+                Intent intent = fileChooserParams.createIntent();
+                intent.setType("*/*");
+                try {
+                    activity.startActivityForResult(intent, FILECHOOSER_RESULTCODE);
+                } catch (ActivityNotFoundException e) {
+                    mFilePathCallback = null;
+                    Toast.makeText(activity.getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                return true;
+            }
+
             //simple yet effective redirect/popup blocker
             @Override
             public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
@@ -207,7 +248,7 @@ public class WebViewHelper {
             // stop loading
             view.stopLoading();
             // stopping only would cause the PWA to freeze, need to reload the app as a workaround
-            view.reload();
+            //view.reload();
 
             // open external URL in Browser/3rd party apps instead
             try {
