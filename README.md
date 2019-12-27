@@ -1,13 +1,19 @@
-# Sincronizado con los cambios de https://github.com/xtools-at/Android-PWA-Wrapper/ hasta el commit  f1bddca0f6c133a98db1c95b56f2b2d31f35709a (15 mayo 2019)
+# Android-PWA-Wrapper
 
-# Pasos a seguir para publicar una versión
+This project was initially forked from https://github.com/xtools-at/Android-PWA-Wrapper/
 
-1. `git pull origin master`
-2. Abrir el proyecto con Android Studio
-3. Asegurarse de que estamos compilando la app en modo `release` (Build -> Select build type -> Release)
-4. Incrementar `Version Code`, `Version Name` y `Version Name Suffix` (File -> Project structure -> Flavors -> default)
-5. Asegurarse de que `Min Sdk Version` es el adecuado (debería ser API 21, Android 5.0)
-6. Asegurarse de que `Tarket Sdk Version` es el adecuado (debería ser API 26, Android 8.0)
-7. Compilar (Build -> Generate Signed Bundle -> Android App Bundle)
-8. Durante el proceso de build seleccionar el certificado `medika-android-cert` y usar las contraseñas correspondientes del `contraseña medika-android-cert.txt`
-9. Subir a Google Play Console y sacar una release (`interna`, `alpha`, `beta` o `produccion`)
+# What is this?
+
+This is a web view that will let you wrap your PWA in an app, suitable to be published in the Google Play Store.
+
+# How do I use it?
+
+* Modify the `Constants.java` file to suite your needs.
+* Replace the icons.
+
+# How do I build the project
+
+1. Open Android Studio
+2. Increase  `Version Code`, `Version Name` and `Version Name Suffix` (`File -> Porject structure -> Flavors -> default`)
+3. Build from the menu `Build -> Generate Signed Bundle -> Android App Bundle`
+4. During the build process, use your certificate and password
