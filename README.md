@@ -14,6 +14,6 @@ This is a web view that will let you wrap your PWA in an app, suitable to be pub
 # How do I build the project
 
 1. Open Android Studio
-2. Increase  `Version Code`, `Version Name` and `Version Name Suffix` (`File -> Porject structure -> Flavors -> default`)
+2. Increase `Version Code`, `Version Name` and `Version Name Suffix` (`File -> Project structure -> Flavors -> default`)
 3. Build from the menu `Build -> Generate Signed Bundle -> Android App Bundle`
 4. During the build process, use your certificate and password
